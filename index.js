@@ -1,10 +1,10 @@
 // Credit to:
 // https://coderwall.com/p/fhgu_q/inlining-images-with-gulp-sass
-var fs    = require('fs');
-var path  = require('path');
+var fs = require('fs');
+var path = require('path');
 var types = require('node-sass').types;
 
-var svg = function(buffer) {
+var svg = function (buffer) {
     var svg = buffer.toString()
         .replace(/\n/g, '')
         .replace(/\r/g, '')
@@ -14,20 +14,14 @@ var svg = function(buffer) {
     return '"data:image/svg+xml;utf8,' + svg + '"';
 };
 
-var img = function(buffer, ext) {
+var img = function (buffer, ext) {
     return '"data:image/' + ext + ';base64,' + buffer.toString('base64') + '"';
 };
 
-module.exports = function(options) {
-    options = options || {};
-
-    var base = options.base || process.cwd();
+module.exports = function () {
     return {
-        'inline-image($file)': function(file) {
-            // we want to file relative to the base
-            var relativePath = './' + file.getValue();
-            var filePath = path.resolve(base, relativePath);
-
+        'inline-image($file)': function (file) {
+            var filePath = path.resolve(path.dirname(this.options.file), file.getValue());
             // get the file ext
             var ext = filePath.split('.').pop();
 
