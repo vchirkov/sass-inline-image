@@ -5,13 +5,9 @@ var path = require('path');
 var types = require('node-sass').types;
 
 var svg = function (buffer) {
-    var svg = buffer.toString()
-        .replace(/\n/g, '')
-        .replace(/\r/g, '')
-        .replace(/\#/g, '%23')
-        .replace(/\"/g, "'");
+    var svg = encodeURIComponent(buffer.toString());
 
-    return '"data:image/svg+xml;utf8,' + svg + '"';
+    return '"data:image/svg+xml,' + svg + '"';
 };
 
 var img = function (buffer, ext) {
@@ -29,7 +25,7 @@ module.exports = function () {
             var data = fs.readFileSync(filePath);
 
             var buffer = new Buffer(data);
-            var str = ext === 'svg' ? svg(buffer, ext) : img(buffer, ext);
+            var str = ext === 'svg' ? svg(buffer) : img(buffer, ext);
             return types.String(str);
         }
     };
